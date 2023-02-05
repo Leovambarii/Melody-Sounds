@@ -67,7 +67,7 @@ def main():
 
     rectangles = pygame.sprite.Group()
     for i in range(8):
-        rec = Rectangle(COLORS["RED"], 50, 30, [i+1, 0])
+        rec = Rectangle(COLORS["RED"], 50, 30, [2*(i+1), 0])
         rec.rect.left = boundary_left.rect.right + 1
         rec.rect.top = 50 * (i+1)
         rectangles.add(rec)
@@ -98,7 +98,12 @@ def main():
         rectangles.update()
 
         for i, rec in enumerate(rectangles):
-            if rec.rect.left <= boundary_left.rect.right or rec.rect.right >= boundary_right.rect.left:
+            if rec.rect.left <= boundary_left.rect.right:
+                rec.rect.left = boundary_left.rect.right + 1
+                pitch_sounds[i].play()
+                rec.bounce()
+            elif rec.rect.right >= boundary_right.rect.left:
+                rec.rect.right = boundary_right.rect.left - 1
                 pitch_sounds[i].play()
                 rec.bounce()
 

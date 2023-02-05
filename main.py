@@ -1,21 +1,28 @@
 import pygame, sys
-import numpy as np
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 
-WIDTH = 700
-HEIGHT = 500
+WIDTH = 500
+HEIGHT = 350
 BOUNDARY_WIDTH = 10
-BOUNDARY_HEIGHT = HEIGHT * 0.8
+BOUNDARY_HEIGHT = 285
 RECTANGLE_WIDTH = 50
 RECTANGLE_HEIGHT = 30
 COLORS = {
+    "RECT_1": (179, 0, 0),
+    "RECT_2": (204, 0, 0),
+    "RECT_3": (230, 0, 0),
+    "RECT_4": (255, 0, 0),
+    "RECT_5": (255, 26, 26),
+    "RECT_6": (255, 51, 51),
+    "RECT_7": (255, 77, 77),
+    "RECT_8": (255, 102, 102),
+    "PINK": (255, 230, 230),
     "BLACK": (0, 0, 0),
     "WHITE": (255, 255, 255),
-    "RED": (255, 0, 0)
 }
-
+COLOR_RECT_NAMES = ["RECT_1", "RECT_2", "RECT_3", "RECT_4", "RECT_5", "RECT_6", "RECT_7", "RECT_8"]
 
 class Boundary(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -50,15 +57,15 @@ def main():
     pygame.display.set_caption("SATISFYING SOUNDS")
     size = WIDTH, HEIGHT
     screen = pygame.display.set_mode(size)
-    screen.fill(COLORS["WHITE"])
+    screen.fill(COLORS["PINK"])
 
     boundary_left = Boundary(COLORS["BLACK"], BOUNDARY_WIDTH, BOUNDARY_HEIGHT)
-    boundary_left.rect.top = HEIGHT * 0.1
-    boundary_left.rect.left = WIDTH * 0.1
+    boundary_left.rect.top = 23
+    boundary_left.rect.left = 40
 
     boundary_right = Boundary(COLORS["BLACK"], BOUNDARY_WIDTH, BOUNDARY_HEIGHT)
-    boundary_right.rect.top = HEIGHT * 0.1
-    boundary_right.rect.right = WIDTH - WIDTH * 0.1
+    boundary_right.rect.top = 23
+    boundary_right.rect.right = WIDTH - 40
 
     boundaries = pygame.sprite.Group()
     boundaries.add(boundary_left)
@@ -66,10 +73,12 @@ def main():
 
 
     rectangles = pygame.sprite.Group()
+    rect_height = 28
     for i in range(8):
-        rec = Rectangle(COLORS["RED"], 50, 30, [2*(i+1), 0])
+        rec = Rectangle(COLORS[COLOR_RECT_NAMES[i]], 50, 30, [1+i, 0])
         rec.rect.left = boundary_left.rect.right + 1
-        rec.rect.top = 50 * (i+1)
+        rec.rect.top = rect_height
+        rect_height += 35
         rectangles.add(rec)
 
     pitch_sounds = []
@@ -94,6 +103,7 @@ def main():
         if keys[pygame.K_ESCAPE]:
             loop = False
 
+        pygame.display.update()
         boundaries.update()
         rectangles.update()
 
@@ -107,11 +117,15 @@ def main():
                 pitch_sounds[i].play()
                 rec.bounce()
 
-        screen.fill(COLORS["WHITE"])
+        screen.fill(COLORS["PINK"])
         boundaries.draw(screen)
         rectangles.draw(screen)
+        line_height = 25
+        for i in range(9):
+            pygame.draw.line(screen, (0, 0, 0), (50, line_height), (WIDTH-50, line_height), 5)
+            line_height += 35
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(50)
 
 if __name__ == '__main__':
     main()

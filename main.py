@@ -74,7 +74,7 @@ def main():
 
     rectangles = pygame.sprite.Group()
     rect_height = 28
-    for i in range(8):
+    for i in range(4):
         rec = Rectangle(COLORS[COLOR_RECT_NAMES[i]], 50, 30, [1+i, 0])
         rec.rect.left = boundary_left.rect.right + 1
         rec.rect.top = rect_height
